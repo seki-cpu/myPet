@@ -1,0 +1,1 @@
+placeholder images for breed cards
