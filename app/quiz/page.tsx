@@ -4,6 +4,7 @@ import { useEffect, useMemo, useRef, useState } from 'react';
 import Link from 'next/link';
 import { useRouter } from 'next/navigation';
 import LocaleSwitcher from '@/components/LocaleSwitcher';
+import PawBackground from '@/components/PawBackground';
 import { personalityQuestions } from '@/data/personalityQuestions.v2';
 import { suitableQuestionsV2 } from '@/data/suitableQuestions.v2';
 import { DEFAULT_LOCALE, LOCALE_STORAGE_KEY, messages, getLocaleFromBrowser } from '@/locales';
@@ -104,8 +105,9 @@ export default function QuizPage() {
   };
 
   return (
-    <main className="page-shell">
-      <section className="quiz-card">
+    <main className={`page-shell ${styles.pageShell}`}>
+      <PawBackground />
+      <section className={`quiz-card ${styles.quizCard}`}>
         <div className="topbar">
           <Link href="/choose" className="ghost-link">← {t.quiz.home}</Link>
           <div className={styles.quizLocale}><LocaleSwitcher /></div>

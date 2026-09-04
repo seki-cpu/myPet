@@ -1,8 +1,12 @@
 .pageShell {
+  position: relative;
+  overflow: hidden;
   padding: 28px 20px;
 }
 
 .chooseCard {
+  position: relative;
+  z-index: 2;
   width: min(100%, 980px);
   padding: 28px;
   text-align: left;
@@ -172,6 +176,7 @@
   .choiceCard {
     min-height: 0;
   }
+
 }
 
 @media (prefers-reduced-motion: reduce) {

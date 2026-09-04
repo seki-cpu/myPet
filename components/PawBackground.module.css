@@ -1,0 +1,88 @@
+.pawBackground {
+  position: absolute;
+  z-index: 0;
+  inset: 0;
+  overflow: hidden;
+  pointer-events: none;
+}
+
+.pawPattern {
+  position: absolute;
+  top: 0;
+  right: -70px;
+  left: -70px;
+  display: flex;
+  height: max(280vh, 240%);
+  flex-direction: column;
+  animation: pawPatternFall 22s linear infinite;
+  will-change: transform;
+}
+
+.pawPatternTile {
+  display: flex;
+  height: 50%;
+  flex: none;
+  flex-direction: column;
+  justify-content: space-around;
+}
+
+.pawRow {
+  display: grid;
+  flex: 1;
+  grid-template-columns: repeat(10, minmax(0, 1fr));
+  place-items: center;
+}
+
+.pawRow:nth-child(even) {
+  transform: translateX(5%);
+}
+
+.paw {
+  display: block;
+  flex: none;
+  color: #ea7fa4;
+  opacity: 0.24;
+}
+
+@keyframes pawPatternFall {
+  from {
+    transform: translateY(-50%);
+  }
+
+  to {
+    transform: translateY(0);
+  }
+}
+
+@media (max-width: 900px) {
+  .pawPattern {
+    right: -44px;
+    left: -44px;
+  }
+
+  .paw {
+    width: 32px;
+    height: 32px;
+    opacity: 0.2;
+  }
+}
+
+@media (max-width: 700px) {
+  .pawPattern {
+    right: -30px;
+    left: -30px;
+    animation-duration: 24s;
+  }
+
+  .paw {
+    width: 22px;
+    height: 22px;
+    opacity: 0.14;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .pawBackground {
+    display: none;
+  }
+}

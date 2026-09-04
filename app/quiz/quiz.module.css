@@ -1,3 +1,13 @@
+.pageShell {
+  position: relative;
+  overflow: hidden;
+}
+
+.quizCard {
+  position: relative;
+  z-index: 2;
+}
+
 .quizLocale {
   min-width: 0;
 }
