@@ -51,7 +51,7 @@ export default function HomePage() {
         </div>
 
         <div className="meta-line">{t.home.meta}</div>
-        <Link href="/quiz" className="cta-button">{t.home.start}</Link>
+        <Link href="/choose" className="cta-button">{t.home.start}</Link>
       </section>
     </main>
   );
