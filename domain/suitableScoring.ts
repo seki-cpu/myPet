@@ -1,9 +1,9 @@
 import { suitableBreedProfiles } from '@/data/suitableBreedProfiles.v1';
 import { suitableQuestions } from '@/data/suitableQuiz.v1';
-import type { SuitableTraitKey, SuitableTraitVector } from '@/types/personality';
+import type { SuitableTraitVector } from '@/types/personality';
 
-const traitKeys: SuitableTraitKey[] = ['activityCapacity', 'companionshipNeed', 'socialPreference', 'trainingEngagement', 'patience', 'independenceFit', 'groomingTolerance', 'noiseTolerance', 'aloneTimeFit'];
-const weights: Record<SuitableTraitKey, number> = { activityCapacity: 3, companionshipNeed: 1.5, socialPreference: 1, trainingEngagement: 3, patience: 2.5, independenceFit: 1.5, groomingTolerance: 3, noiseTolerance: 1.5, aloneTimeFit: 3 };
+const traitKeys = ['activityCapacity', 'companionshipNeed', 'socialPreference', 'trainingEngagement', 'patience', 'independenceFit', 'groomingTolerance', 'noiseTolerance', 'aloneTimeFit'] as const;
+const weights: Record<string, number> = { activityCapacity: 3, companionshipNeed: 1.5, socialPreference: 1, trainingEngagement: 3, patience: 2.5, independenceFit: 1.5, groomingTolerance: 3, noiseTolerance: 1.5, aloneTimeFit: 3 };
 const breedOrder = suitableBreedProfiles.map((profile) => profile.breedId);
 
 export const computeSuitableResult = (answers: Record<string, string>) => {

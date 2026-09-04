@@ -4,11 +4,12 @@ import { useEffect, useMemo, useRef, useState } from 'react';
 import Link from 'next/link';
 import { useRouter } from 'next/navigation';
 import LocaleSwitcher from '@/components/LocaleSwitcher';
-import { quizQuestions } from '@/data/quiz.v1';
-import { suitableQuestions } from '@/data/suitableQuiz.v1';
+import { personalityQuestions } from '@/data/personalityQuestions.v2';
+import { suitableQuestionsV2 } from '@/data/suitableQuestions.v2';
 import { DEFAULT_LOCALE, LOCALE_STORAGE_KEY, messages, getLocaleFromBrowser } from '@/locales';
 import type { Locale } from '@/locales/types';
 import type { QuizType } from '@/types/personality';
+import styles from './quiz.module.css';
 
 const PERSONALITY_STORAGE_KEY = 'pawmatch:personality:v1';
 const SUITABLE_STORAGE_KEY = 'pawmatch:suitable:v1';
@@ -22,7 +23,7 @@ export default function QuizPage() {
   const answersRef = useRef<Record<string, string>>({});
   const advanceTimerRef = useRef<number | null>(null);
 
-  const questions = quizType === 'suitable' ? suitableQuestions : quizQuestions;
+  const questions = quizType === 'suitable' ? suitableQuestionsV2 : personalityQuestions;
   const storageKey = quizType === 'suitable' ? SUITABLE_STORAGE_KEY : PERSONALITY_STORAGE_KEY;
 
   useEffect(() => {
@@ -36,7 +37,7 @@ export default function QuizPage() {
           setAnswers(parsed.answers);
           answersRef.current = parsed.answers;
           const savedIndex = Number(parsed.index);
-          setIndex(Number.isInteger(savedIndex) ? Math.max(0, Math.min(savedIndex, (nextType === 'suitable' ? suitableQuestions : quizQuestions).length - 1)) : 0);
+          setIndex(Number.isInteger(savedIndex) ? Math.max(0, Math.min(savedIndex, (nextType === 'suitable' ? suitableQuestionsV2 : personalityQuestions).length - 1)) : 0);
         }
       } catch {
         window.sessionStorage.removeItem(nextType === 'suitable' ? SUITABLE_STORAGE_KEY : PERSONALITY_STORAGE_KEY);
@@ -107,7 +108,7 @@ export default function QuizPage() {
       <section className="quiz-card">
         <div className="topbar">
           <Link href="/choose" className="ghost-link">← {t.quiz.home}</Link>
-          <LocaleSwitcher />
+          <div className={styles.quizLocale}><LocaleSwitcher /></div>
           <div className="progress-wrap">
             <span>{t.quiz.progress.replace('{current}', String(currentIndex + 1)).replace('{total}', String(questions.length))}</span>
             <div className="progress-bar"><div style={{ width: `${progress}%` }} /></div>
