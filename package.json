@@ -7,7 +7,8 @@
     "build": "next build",
     "start": "next start",
     "lint": "next lint",
-    "typecheck": "tsc --noEmit"
+    "typecheck": "tsc --noEmit",
+    "test:distribution": "node --experimental-strip-types scripts/analyze-personality-distribution.mjs"
   },
   "dependencies": {
     "html-to-image": "^1.11.11",
