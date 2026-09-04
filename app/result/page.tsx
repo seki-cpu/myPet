@@ -107,11 +107,6 @@ export default function ResultPage() {
     setMessage(t.result.copied);
   };
 
-  const emailResult = () => {
-    const breedName = messages[locale].breeds[primary?.id ?? '']?.name ?? primary?.name ?? '';
-    window.location.href = `mailto:?subject=${encodeURIComponent('PawMatch')}&body=${encodeURIComponent(`${breedName}\n${resultUrl}`)}`;
-  };
-
   const shareSocial = async (platform: 'wechat' | 'instagram' | 'whatsapp' | 'line' | 'copy') => {
     const breedName = messages[locale].breeds[primary?.id ?? '']?.name ?? primary?.name ?? '';
     const shareText = `${t.result.suitableRevealTitle} ${breedName} ${resultUrl}`;
@@ -154,10 +149,14 @@ export default function ResultPage() {
 
         <div className="action-group">
           <button className="primary" onClick={downloadImage}>{t.result.saveImage}</button>
-          {quizType === 'personality' && <button className="secondary" onClick={shareResult}>{t.result.share}</button>}
-          {quizType === 'personality' && <button className="secondary" onClick={emailResult}>{t.result.email}</button>}
           <button className="ghost" onClick={resetQuiz}>{t.result.retry}</button>
         </div>
+
+        {isMobile && (
+          <div className="action-group single-action">
+            <button className="primary" onClick={shareResult}>{t.result.share}</button>
+          </div>
+        )}
 
         {quizType === 'suitable' && isMobile && (
           <div className="action-group" aria-label={t.result.socialTitle}>

@@ -1,6 +1,6 @@
 'use client';
 
-import { useEffect, useMemo, useState } from 'react';
+import { useEffect, useMemo, useRef, useState } from 'react';
 import Link from 'next/link';
 import { useRouter } from 'next/navigation';
 import LocaleSwitcher from '@/components/LocaleSwitcher';
@@ -19,6 +19,8 @@ export default function QuizPage() {
   const [answers, setAnswers] = useState<Record<string, string>>({});
   const [locale, setLocale] = useState<Locale>(DEFAULT_LOCALE);
   const [quizType, setQuizType] = useState<QuizType>('personality');
+  const answersRef = useRef<Record<string, string>>({});
+  const advanceTimerRef = useRef<number | null>(null);
 
   const questions = quizType === 'suitable' ? suitableQuestions : quizQuestions;
   const storageKey = quizType === 'suitable' ? SUITABLE_STORAGE_KEY : PERSONALITY_STORAGE_KEY;
@@ -32,6 +34,7 @@ export default function QuizPage() {
         const parsed = JSON.parse(stored);
         if (parsed?.answers && parsed?.index !== undefined) {
           setAnswers(parsed.answers);
+          answersRef.current = parsed.answers;
           const savedIndex = Number(parsed.index);
           setIndex(Number.isInteger(savedIndex) ? Math.max(0, Math.min(savedIndex, (nextType === 'suitable' ? suitableQuestions : quizQuestions).length - 1)) : 0);
         }
@@ -60,28 +63,43 @@ export default function QuizPage() {
   }, [index, answers, storageKey]);
 
   const current = questions[Math.max(0, Math.min(index, questions.length - 1))] ?? questions[0];
-  const progress = useMemo(() => Math.round(((index + 1) / questions.length) * 100), [index, questions.length]);
+  const currentIndex = Math.max(0, Math.min(index, questions.length - 1));
+  const progress = useMemo(() => Math.round(((currentIndex + 1) / questions.length) * 100), [currentIndex, questions.length]);
   const t = messages[locale];
   const currentQuestionId = current.id as keyof typeof t.questions & keyof typeof t.suitableQuestions;
   const translatedQuestion = quizType === 'suitable' ? t.suitableQuestions[currentQuestionId as keyof typeof t.suitableQuestions] : t.questions[currentQuestionId as keyof typeof t.questions];
 
   const selectOption = (optionId: string) => {
-    setAnswers((prev) => ({ ...prev, [current.id]: optionId }));
-    if (index < questions.length - 1) {
-      window.setTimeout(() => setIndex((prev) => prev + 1), 250);
+    const nextAnswers = { ...answersRef.current, [current.id]: optionId };
+    answersRef.current = nextAnswers;
+    setAnswers(nextAnswers);
+    if (currentIndex < questions.length - 1) {
+      if (advanceTimerRef.current !== null) window.clearTimeout(advanceTimerRef.current);
+      advanceTimerRef.current = window.setTimeout(() => {
+        setIndex((prev) => Math.min(prev + 1, questions.length - 1));
+        advanceTimerRef.current = null;
+      }, 250);
     }
   };
 
   const onNext = () => {
-    if (index < questions.length - 1) setIndex((prev) => prev + 1);
+    if (advanceTimerRef.current !== null) {
+      window.clearTimeout(advanceTimerRef.current);
+      advanceTimerRef.current = null;
+    }
+    if (currentIndex < questions.length - 1) setIndex((prev) => Math.min(prev + 1, questions.length - 1));
     else {
-      window.sessionStorage.setItem(storageKey, JSON.stringify({ index, answers }));
+      window.sessionStorage.setItem(storageKey, JSON.stringify({ index: currentIndex, answers: answersRef.current }));
       router.push(`/result?type=${quizType}`);
     }
   };
 
   const onPrev = () => {
-    if (index > 0) setIndex((prev) => prev - 1);
+    if (advanceTimerRef.current !== null) {
+      window.clearTimeout(advanceTimerRef.current);
+      advanceTimerRef.current = null;
+    }
+    if (currentIndex > 0) setIndex((prev) => Math.max(prev - 1, 0));
   };
 
   return (
@@ -91,7 +109,7 @@ export default function QuizPage() {
           <Link href="/choose" className="ghost-link">← {t.quiz.home}</Link>
           <LocaleSwitcher />
           <div className="progress-wrap">
-            <span>{t.quiz.progress.replace('{current}', String(index + 1)).replace('{total}', String(questions.length))}</span>
+            <span>{t.quiz.progress.replace('{current}', String(currentIndex + 1)).replace('{total}', String(questions.length))}</span>
             <div className="progress-bar"><div style={{ width: `${progress}%` }} /></div>
           </div>
         </div>
@@ -112,8 +130,8 @@ export default function QuizPage() {
         </div>
 
         <div className="actions">
-          <button className="secondary" onClick={onPrev} disabled={index === 0}>{t.quiz.previous}</button>
-          <button className="primary" onClick={onNext} disabled={!answers[current.id]}>{index === questions.length - 1 ? t.quiz.reveal : t.quiz.next}</button>
+          <button className="secondary" onClick={onPrev} disabled={currentIndex === 0}>{t.quiz.previous}</button>
+          <button className="primary" onClick={onNext} disabled={!answers[current.id]}>{currentIndex === questions.length - 1 ? t.quiz.reveal : t.quiz.next}</button>
         </div>
       </section>
     </main>
