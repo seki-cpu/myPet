@@ -1,0 +1,21 @@
+import type { PersonalityQuestion, PersonalityTraitKey, PersonalityTraitVector } from '@/types/personality';
+
+const keys: PersonalityTraitKey[] = ['extraversion', 'independence', 'warmth', 'conscientiousness', 'curiosity', 'sensitivity', 'stubbornness', 'spontaneity', 'confidence', 'loyalty'];
+const vector = (values: Partial<Record<PersonalityTraitKey, number>>): PersonalityTraitVector => keys.reduce((result, key) => { result[key] = values[key] ?? 0; return result; }, {} as PersonalityTraitVector);
+
+export const personalityQuestions: PersonalityQuestion[] = [
+  { id: 'q1', options: [{ id: 'A', vector: vector({ extraversion: 3, warmth: 1 }) }, { id: 'B', vector: vector({ independence: 1, conscientiousness: 1 }) }, { id: 'C', vector: vector({ curiosity: 2, spontaneity: 2 }) }, { id: 'D', vector: vector({ independence: 3, extraversion: -1 }) }] },
+  { id: 'q2', options: [{ id: 'A', vector: vector({ extraversion: 3, confidence: 2 }) }, { id: 'B', vector: vector({ extraversion: 1, warmth: 2 }) }, { id: 'C', vector: vector({ sensitivity: 1, independence: 1 }) }, { id: 'D', vector: vector({ independence: 2, stubbornness: 1 }) }] },
+  { id: 'q3', options: [{ id: 'A', vector: vector({ extraversion: 2, warmth: 1 }) }, { id: 'B', vector: vector({ independence: 1 }) }, { id: 'C', vector: vector({ sensitivity: 3 }) }, { id: 'D', vector: vector({ independence: 3 }) }] },
+  { id: 'q4', options: [{ id: 'A', vector: vector({ extraversion: 2, confidence: 1 }) }, { id: 'B', vector: vector({ warmth: 3, loyalty: 1 }) }, { id: 'C', vector: vector({ sensitivity: 2, conscientiousness: 1 }) }, { id: 'D', vector: vector({ stubbornness: 2, conscientiousness: 2 }) }] },
+  { id: 'q5', options: [{ id: 'A', vector: vector({ spontaneity: 3, confidence: 1 }) }, { id: 'B', vector: vector({ conscientiousness: 3, curiosity: 1 }) }, { id: 'C', vector: vector({ extraversion: 2, warmth: 1 }) }, { id: 'D', vector: vector({ independence: 2, conscientiousness: 1 }) }] },
+  { id: 'q6', options: [{ id: 'A', vector: vector({ spontaneity: 3 }) }, { id: 'B', vector: vector({ spontaneity: 2, curiosity: 1 }) }, { id: 'C', vector: vector({ curiosity: 2, conscientiousness: 2 }) }, { id: 'D', vector: vector({ conscientiousness: 3 }) }] },
+  { id: 'q7', options: [{ id: 'A', vector: vector({ confidence: 3, extraversion: 1 }) }, { id: 'B', vector: vector({ warmth: 1, confidence: 1 }) }, { id: 'C', vector: vector({ sensitivity: 3 }) }, { id: 'D', vector: vector({ independence: 3, stubbornness: 1 }) }] },
+  { id: 'q8', options: [{ id: 'A', vector: vector({ warmth: 2, confidence: 1 }) }, { id: 'B', vector: vector({ conscientiousness: 3 }) }, { id: 'C', vector: vector({ sensitivity: 2, warmth: 2 }) }, { id: 'D', vector: vector({ confidence: 2, stubbornness: 1 }) }] },
+  { id: 'q9', options: [{ id: 'A', vector: vector({ conscientiousness: 2, confidence: 1 }) }, { id: 'B', vector: vector({ conscientiousness: 3 }) }, { id: 'C', vector: vector({ spontaneity: 2, curiosity: 1 }) }, { id: 'D', vector: vector({ independence: 2, stubbornness: 3 }) }] },
+  { id: 'q10', options: [{ id: 'A', vector: vector({ spontaneity: 3 }) }, { id: 'B', vector: vector({ warmth: 3 }) }, { id: 'C', vector: vector({ conscientiousness: 2, warmth: 1 }) }, { id: 'D', vector: vector({ conscientiousness: 3 }) }] },
+  { id: 'q11', options: [{ id: 'A', vector: vector({ spontaneity: 3 }) }, { id: 'B', vector: vector({ warmth: 3 }) }, { id: 'C', vector: vector({ sensitivity: 3 }) }, { id: 'D', vector: vector({ stubbornness: 3, independence: 1 }) }] },
+  { id: 'q12', options: [{ id: 'A', vector: vector({ extraversion: 2, warmth: 2 }) }, { id: 'B', vector: vector({ warmth: 2, loyalty: 2 }) }, { id: 'C', vector: vector({ extraversion: 1, spontaneity: 1, loyalty: 1 }) }, { id: 'D', vector: vector({ independence: 1, loyalty: 3 }) }] },
+  { id: 'q13', options: [{ id: 'A', vector: vector({ warmth: 1, confidence: 1 }) }, { id: 'B', vector: vector({ conscientiousness: 2, confidence: 1 }) }, { id: 'C', vector: vector({ sensitivity: 2, curiosity: 2 }) }, { id: 'D', vector: vector({ independence: 2, stubbornness: 2 }) }] },
+  { id: 'q14', options: [{ id: 'A', vector: vector({ spontaneity: 3 }) }, { id: 'B', vector: vector({ warmth: 2, conscientiousness: 1 }) }, { id: 'C', vector: vector({ sensitivity: 3 }) }, { id: 'D', vector: vector({ stubbornness: 3, independence: 1 }) }] },
+];

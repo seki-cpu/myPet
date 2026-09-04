@@ -1,0 +1,26 @@
+.pageShell {
+  position: relative;
+  overflow: hidden;
+}
+
+.quizCard {
+  position: relative;
+  z-index: 2;
+}
+
+.quizLocale {
+  min-width: 0;
+}
+
+@media (max-width: 700px) {
+  .quizLocale :global(.locale-switcher) {
+    flex-wrap: nowrap;
+    gap: 4px;
+  }
+
+  .quizLocale :global(.locale-button) {
+    flex: 0 0 auto;
+    padding: 6px 8px;
+    font-size: 13px;
+  }
+}

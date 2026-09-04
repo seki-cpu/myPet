@@ -5,7 +5,7 @@ import Link from 'next/link';
 import { toPng } from 'html-to-image';
 import LocaleSwitcher from '@/components/LocaleSwitcher';
 import { computeResult } from '@/domain/scoring';
-import { computeSuitableResult } from '@/domain/suitableScoring';
+import { computeSuitableResultV2 } from '@/domain/suitableScoring.v2';
 import { getBreedById } from '@/domain/scoring';
 import { DEFAULT_LOCALE, LOCALE_STORAGE_KEY, messages, getLocaleFromBrowser } from '@/locales';
 import type { Locale } from '@/locales/types';
@@ -34,7 +34,7 @@ export default function ResultPage() {
     try {
       const parsed = JSON.parse(stored);
       if (nextType === 'suitable') {
-        const outcome = computeSuitableResult(parsed.answers ?? {});
+        const outcome = computeSuitableResultV2(parsed.answers ?? {});
         if (outcome.status === 'incomplete') {
           window.location.href = `/quiz?type=${nextType}`;
           return;
@@ -96,7 +96,7 @@ export default function ResultPage() {
 
   const resetQuiz = () => {
     window.sessionStorage.removeItem(quizType === 'suitable' ? SUITABLE_STORAGE_KEY : PERSONALITY_STORAGE_KEY);
-    window.location.href = `/quiz?type=${quizType}`;
+    window.location.href = '/choose';
   };
 
   const shareResult = async () => {
@@ -144,6 +144,8 @@ export default function ResultPage() {
           <p className="summary">{quizType === 'suitable' ? t.result.suitableWhy.replace('{breed}', messages[locale].breeds[primary.id]?.name ?? primary.name) : messages[locale].breeds[primary.id]?.summary ?? primary.summary}</p>
           <div className="flaw">{quizType === 'suitable' ? `${t.result.considerationsLabel}：${t.result.suitableConsideration} ${t.result.healthNotice} ${t.suitableCautions[primary.id]}` : `${t.result.cuteFlawLabel}：${messages[locale].breeds[primary.id]?.flaw ?? primary.cuteFlaw}`}</div>
           <div className="secondary">{(quizType === 'suitable' ? t.result.suitableSecondaryPrefix : t.result.secondaryPrefix).replace('{breed}', messages[locale].breeds[secondary.id]?.name ?? secondary.name)}</div>
+          {quizType === 'suitable' && result.rankedBreeds && <div className="small-note">{t.result.topMatches}：{result.rankedBreeds.map((match: { breedId: string; score: number }) => `${messages[locale].breeds[match.breedId]?.name ?? match.breedId} ${match.score}%`).join(' · ')}</div>}
+          {quizType === 'personality' && result.keywords && <div className="small-note">{t.result.personalityKeywords}：{result.keywords.map((key: string) => t.result.personalityTraitLabels[key] ?? key).join(' · ')}</div>}
           {quizType === 'suitable' && <p className="small-note">{t.result.suitabilityDisclaimer}</p>}
         </div>
 

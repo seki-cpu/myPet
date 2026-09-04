@@ -22,6 +22,25 @@ export type QuizQuestion = {
   options: QuizOption[];
 };
 
+export type PersonalityTraitKey =
+  | 'extraversion'
+  | 'independence'
+  | 'warmth'
+  | 'conscientiousness'
+  | 'curiosity'
+  | 'sensitivity'
+  | 'stubbornness'
+  | 'spontaneity'
+  | 'confidence'
+  | 'loyalty';
+
+export type PersonalityTraitVector = Record<PersonalityTraitKey, number>;
+
+export type PersonalityQuestion = {
+  id: `q${number}`;
+  options: Array<{ id: 'A' | 'B' | 'C' | 'D'; vector: Partial<PersonalityTraitVector> }>;
+};
+
 export type BreedResult = {
   id: string;
   name: string;
@@ -37,20 +56,52 @@ export type QuizType = 'personality' | 'suitable';
 
 export type SuitableTraitKey =
   | 'activityCapacity'
-  | 'companionshipNeed'
+  | 'trainingCommitment'
   | 'socialPreference'
+  | 'attachmentPreference'
+  | 'groomingTolerance'
+  | 'noiseTolerance'
+  | 'chaosTolerance'
+  | 'aloneHours'
+  | 'sensitivityTolerance'
+  | 'independencePreference'
+  | 'companionshipNeed'
   | 'trainingEngagement'
   | 'patience'
   | 'independenceFit'
-  | 'groomingTolerance'
-  | 'noiseTolerance'
   | 'aloneTimeFit';
 
-export type SuitableTraitVector = Record<SuitableTraitKey, number>;
+export type LegacySuitableTraitKey =
+  | 'companionshipNeed'
+  | 'trainingEngagement'
+  | 'patience'
+  | 'independenceFit'
+  | 'aloneTimeFit';
+
+export type SuitableTraitVector = Record<string, number>;
 
 export type SuitableQuestion = {
   id: `S${number}`;
   options: Array<{ id: 'A' | 'B' | 'C' | 'D'; vector: Partial<SuitableTraitVector> }>;
+};
+
+export type DogLifestyleProfile = {
+  breedId: BreedResult['id'];
+  activityNeed: number;
+  trainingNeed: number;
+  sociability: number;
+  attachment: number;
+  groomingNeed: number;
+  vocality: number;
+  chaosPotential: number;
+  aloneToleranceHours: number;
+  sensitivity: number;
+  independence: number;
+};
+
+export type DogPersonalityProfile = {
+  breedId: BreedResult['id'];
+  traits: PersonalityTraitVector;
 };
 
 export type SuitableBreedProfile = {

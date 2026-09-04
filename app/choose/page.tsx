@@ -3,6 +3,7 @@
 import Link from 'next/link';
 import { useEffect, useState } from 'react';
 import LocaleSwitcher from '@/components/LocaleSwitcher';
+import PawBackground from '@/components/PawBackground';
 import { DEFAULT_LOCALE, LOCALE_STORAGE_KEY, messages, getLocaleFromBrowser } from '@/locales';
 import type { Locale } from '@/locales/types';
 import styles from './choose.module.css';
@@ -21,6 +22,7 @@ export default function ChoosePage() {
   const t = messages[locale];
   return (
     <main className={`page-shell ${styles.pageShell}`}>
+      <PawBackground />
       <section className={`hero-card home-card ${styles.chooseCard}`}>
         <header className={styles.header}>
           <div className={styles.brandMark} aria-label="PawMatch">PawMatch <span>•</span></div>

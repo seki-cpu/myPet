@@ -1,6 +1,6 @@
 import type { SuitableBreedProfile, SuitableTraitKey } from '@/types/personality';
 
-const traits = (values: Record<SuitableTraitKey, number>) => values;
+const traits = (values: Record<string, number>) => values;
 
 export const suitableBreedProfiles: SuitableBreedProfile[] = [
   { breedId: 'golden-retriever', traits: traits({ activityCapacity: 70, companionshipNeed: 85, socialPreference: 75, trainingEngagement: 70, patience: 65, independenceFit: 30, groomingTolerance: 60, noiseTolerance: 65, aloneTimeFit: 25 }), cautions: ['需要稳定的陪伴、运动和日常梳理。'] },

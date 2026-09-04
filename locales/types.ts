@@ -1,7 +1,7 @@
 export type Locale = 'zh' | 'ja' | 'en';
 
-export type QuestionId = 'q1' | 'q2' | 'q3' | 'q4' | 'q5' | 'q6' | 'q7' | 'q8' | 'q9' | 'q10';
-export type SuitableQuestionId = 'S1' | 'S2' | 'S3' | 'S4' | 'S5' | 'S6' | 'S7' | 'S8' | 'S9' | 'S10';
+export type QuestionId = 'q1' | 'q2' | 'q3' | 'q4' | 'q5' | 'q6' | 'q7' | 'q8' | 'q9' | 'q10' | 'q11' | 'q12' | 'q13' | 'q14';
+export type SuitableQuestionId = 'S1' | 'S2' | 'S3' | 'S4' | 'S5' | 'S6' | 'S7' | 'S8' | 'S9' | 'S10' | 'S11' | 'S12' | 'S13' | 'S14';
 export type OptionId = 'A' | 'B' | 'C' | 'D';
 
 export interface PawMatchMessages {
@@ -66,6 +66,10 @@ export interface PawMatchMessages {
     instagram: string;
     whatsapp: string;
     line: string;
+    topMatches: string;
+    scoreLabel: string;
+    personalityKeywords: string;
+    personalityTraitLabels: Record<string, string>;
   };
   notices: {
     entertainment: string;
