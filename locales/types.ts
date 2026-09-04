@@ -1,6 +1,7 @@
 export type Locale = 'zh' | 'ja' | 'en';
 
 export type QuestionId = 'q1' | 'q2' | 'q3' | 'q4' | 'q5' | 'q6' | 'q7' | 'q8' | 'q9' | 'q10';
+export type SuitableQuestionId = 'S1' | 'S2' | 'S3' | 'S4' | 'S5' | 'S6' | 'S7' | 'S8' | 'S9' | 'S10';
 export type OptionId = 'A' | 'B' | 'C' | 'D';
 
 export interface PawMatchMessages {
@@ -20,6 +21,16 @@ export interface PawMatchMessages {
     description: string;
     start: string;
     meta: string;
+  };
+  entry: {
+    title: string;
+    description: string;
+    suitableTitle: string;
+    suitableDescription: string;
+    suitableStart: string;
+    personalityTitle: string;
+    personalityDescription: string;
+    personalityStart: string;
   };
   quiz: {
     previous: string;
@@ -41,6 +52,20 @@ export interface PawMatchMessages {
     loading: string;
     privacy: string;
     entertainment: string;
+    suitableRevealTitle: string;
+    suitableSecondaryPrefix: string;
+    whySuitableLabel: string;
+    considerationsLabel: string;
+    suitabilityDisclaimer: string;
+    healthNotice: string;
+    suitableWhy: string;
+    suitableConsideration: string;
+    socialTitle: string;
+    copyLink: string;
+    wechat: string;
+    instagram: string;
+    whatsapp: string;
+    line: string;
   };
   notices: {
     entertainment: string;
@@ -52,6 +77,12 @@ export interface PawMatchMessages {
     text: string;
     options: Record<OptionId, string>;
   }>;
+  suitableQuestions: Record<SuitableQuestionId, {
+    text: string;
+    options: Record<OptionId, string>;
+  }>;
+  suitableTags: Record<string, [string, string, string]>;
+  suitableCautions: Record<string, string>;
   breeds: Record<string, {
     name: string;
     tags: [string, string, string];

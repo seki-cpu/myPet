@@ -1,0 +1,18 @@
+import type { SuitableBreedProfile, SuitableTraitKey } from '@/types/personality';
+
+const traits = (values: Record<SuitableTraitKey, number>) => values;
+
+export const suitableBreedProfiles: SuitableBreedProfile[] = [
+  { breedId: 'golden-retriever', traits: traits({ activityCapacity: 70, companionshipNeed: 85, socialPreference: 75, trainingEngagement: 70, patience: 65, independenceFit: 30, groomingTolerance: 60, noiseTolerance: 65, aloneTimeFit: 25 }), cautions: ['需要稳定的陪伴、运动和日常梳理。'] },
+  { breedId: 'labrador', traits: traits({ activityCapacity: 85, companionshipNeed: 85, socialPreference: 80, trainingEngagement: 75, patience: 70, independenceFit: 25, groomingTolerance: 45, noiseTolerance: 75, aloneTimeFit: 20 }), cautions: ['精力旺盛，需要每天运动和互动。'] },
+  { breedId: 'poodle', traits: traits({ activityCapacity: 60, companionshipNeed: 70, socialPreference: 65, trainingEngagement: 90, patience: 80, independenceFit: 45, groomingTolerance: 90, noiseTolerance: 45, aloneTimeFit: 35 }), cautions: ['需要持续训练、脑力活动和专业美容。'] },
+  { breedId: 'border-collie', traits: traits({ activityCapacity: 98, companionshipNeed: 75, socialPreference: 55, trainingEngagement: 98, patience: 95, independenceFit: 40, groomingTolerance: 45, noiseTolerance: 70, aloneTimeFit: 15 }), cautions: ['运动、训练和陪伴不足时容易出现行为问题。'] },
+  { breedId: 'shiba-inu', traits: traits({ activityCapacity: 55, companionshipNeed: 40, socialPreference: 30, trainingEngagement: 65, patience: 75, independenceFit: 95, groomingTolerance: 55, noiseTolerance: 55, aloneTimeFit: 70 }), cautions: ['独立但需要耐心、边界和稳定的社会化。'] },
+  { breedId: 'husky', traits: traits({ activityCapacity: 98, companionshipNeed: 75, socialPreference: 65, trainingEngagement: 80, patience: 90, independenceFit: 70, groomingTolerance: 65, noiseTolerance: 90, aloneTimeFit: 15 }), cautions: ['高运动量、较吵闹，不适合长期独处。'] },
+  { breedId: 'samoyed', traits: traits({ activityCapacity: 75, companionshipNeed: 90, socialPreference: 85, trainingEngagement: 65, patience: 65, independenceFit: 25, groomingTolerance: 95, noiseTolerance: 75, aloneTimeFit: 20 }), cautions: ['陪伴需求和护理需求都较高。'] },
+  { breedId: 'german-shepherd', traits: traits({ activityCapacity: 85, companionshipNeed: 70, socialPreference: 45, trainingEngagement: 90, patience: 85, independenceFit: 55, groomingTolerance: 45, noiseTolerance: 65, aloneTimeFit: 35 }), cautions: ['需要稳定训练、运动和负责任的社会化。'] },
+  { breedId: 'greyhound', traits: traits({ activityCapacity: 45, companionshipNeed: 55, socialPreference: 30, trainingEngagement: 45, patience: 55, independenceFit: 75, groomingTolerance: 20, noiseTolerance: 35, aloneTimeFit: 65 }), cautions: ['需要规律短时运动和安静、舒适的休息空间。'] },
+  { breedId: 'corgi', traits: traits({ activityCapacity: 75, companionshipNeed: 75, socialPreference: 80, trainingEngagement: 75, patience: 70, independenceFit: 55, groomingTolerance: 65, noiseTolerance: 70, aloneTimeFit: 35 }), cautions: ['精力和声音管理需要投入，掉毛也较明显。'] },
+  { breedId: 'beagle', traits: traits({ activityCapacity: 80, companionshipNeed: 70, socialPreference: 75, trainingEngagement: 65, patience: 85, independenceFit: 60, groomingTolerance: 25, noiseTolerance: 90, aloneTimeFit: 30 }), cautions: ['好奇心强，可能吵闹，需要耐心管理和运动。'] },
+  { breedId: 'french-bulldog', traits: traits({ activityCapacity: 30, companionshipNeed: 80, socialPreference: 65, trainingEngagement: 45, patience: 55, independenceFit: 35, groomingTolerance: 35, noiseTolerance: 45, aloneTimeFit: 30 }), cautions: ['短鼻相关健康风险可能带来更高的医疗和护理费用，也需注意高温。'] },
+];
