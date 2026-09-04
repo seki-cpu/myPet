@@ -74,7 +74,10 @@ export default function QuizPage() {
 
   const onNext = () => {
     if (index < questions.length - 1) setIndex((prev) => prev + 1);
-    else router.push(`/result?type=${quizType}`);
+    else {
+      window.sessionStorage.setItem(storageKey, JSON.stringify({ index, answers }));
+      router.push(`/result?type=${quizType}`);
+    }
   };
 
   const onPrev = () => {
