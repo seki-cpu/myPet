@@ -3,8 +3,8 @@ import { suitableQuestionsV2 } from '../data/suitableQuestions.v2.ts';
 import { scoreSuitableAnswers, suitableScoringTraitKeys } from '../domain/suitableScoringModel.ts';
 
 const DEFAULT_SAMPLE_COUNT = 100_000;
-const MAX_PRIMARY_SHARE = 22;
-const MIN_PRIMARY_SHARE = 2;
+const MAX_PRIMARY_SHARE = 16;
+const MIN_PRIMARY_SHARE = 3;
 const SEED = 0x51a7ab1e;
 
 const requestedSamples = process.argv.find((argument) => argument.startsWith('--samples='));
@@ -97,7 +97,7 @@ for (const [code, count] of Object.entries(winningPenaltyCounts)) console.log(`-
 
 const fixtures = {
   'quiet-low-maintenance': {
-    expected: 'french-bulldog',
+    expected: 'greyhound',
     answers: { S1: 'A', S2: 'A', S3: 'C', S4: 'B', S5: 'A', S6: 'A', S7: 'A', S8: 'A', S9: 'A', S10: 'B', S11: 'A', S12: 'A', S13: 'A', S14: 'A' },
   },
   'active-social-low-alone-time': {
@@ -108,9 +108,9 @@ const fixtures = {
     expected: 'golden-retriever',
     answers: { S1: 'C', S2: 'C', S3: 'A', S4: 'C', S5: 'C', S6: 'D', S7: 'B', S8: 'C', S9: 'B', S10: 'B', S11: 'B', S12: 'B', S13: 'B', S14: 'B' },
   },
-  'long-alone-time-overrides-adventure': {
-    expected: 'shiba-inu',
-    answers: Object.fromEntries(suitableQuestionsV2.map((question) => [question.id, 'D'])),
+  'independent-with-long-alone-time': {
+    expected: 'greyhound',
+    answers: { S1: 'B', S2: 'B', S3: 'D', S4: 'B', S5: 'A', S6: 'A', S7: 'A', S8: 'A', S9: 'A', S10: 'B', S11: 'A', S12: 'A', S13: 'C', S14: 'A' },
   },
 };
 

@@ -117,10 +117,13 @@ export const scoreSuitableAnswers = ({ answers, questions, profiles }: SuitableS
     const baseScore = clamp((cosineSimilarity + 1) * 50, 0, 100);
 
     const penalties: Array<{ code: SuitablePenaltyCode; amount: number }> = [];
-    if (profile.activityNeed - normalized.activityCapacity >= 4) penalties.push({ code: 'ACTIVITY_SHORTFALL', amount: 30 });
-    if (normalized.aloneHours - profile.aloneToleranceHours >= 3) penalties.push({ code: 'ALONE_TIME_SHORTFALL', amount: 60 });
-    if (profile.groomingNeed - normalized.groomingTolerance >= 5) penalties.push({ code: 'GROOMING_SHORTFALL', amount: 20 });
-    if (profile.trainingNeed - normalized.trainingCommitment >= 5) penalties.push({ code: 'TRAINING_SHORTFALL', amount: 20 });
+    // Directional similarity already accounts for lifestyle mismatch. These are
+    // deliberately light safety nudges, not dominant gates that collapse most
+    // answers into the three lowest-demand breeds.
+    if (profile.activityNeed - normalized.activityCapacity >= 4) penalties.push({ code: 'ACTIVITY_SHORTFALL', amount: 5 });
+    if (normalized.aloneHours - profile.aloneToleranceHours >= 3) penalties.push({ code: 'ALONE_TIME_SHORTFALL', amount: 7 });
+    if (profile.groomingNeed - normalized.groomingTolerance >= 5) penalties.push({ code: 'GROOMING_SHORTFALL', amount: 4 });
+    if (profile.trainingNeed - normalized.trainingCommitment >= 5) penalties.push({ code: 'TRAINING_SHORTFALL', amount: 4 });
     const penaltyTotal = penalties.reduce((sum, penalty) => sum + penalty.amount, 0);
 
     return {
