@@ -40,7 +40,7 @@ export const jaMessages: PawMatchMessages = {
     secondaryPrefix: '実はちょっとだけ {breed} タイプでもある',
     cuteFlawLabel: 'ちょっと可愛い弱点',
     saveImage: '画像を保存',
-    share: '結果をシェア',
+    share: '結果画像をシェア',
     email: 'メールで送る',
     copy: 'テキストをコピー',
     copied: 'コピーしました',
