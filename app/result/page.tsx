@@ -28,6 +28,7 @@ export default function ResultPage() {
   const [locale, setLocale] = useState<Locale>(DEFAULT_LOCALE);
   const [quizType, setQuizType] = useState<QuizType>('personality');
   const [isMobile, setIsMobile] = useState(false);
+  const [isEmbeddedBrowser, setIsEmbeddedBrowser] = useState<boolean | null>(null);
 
   useEffect(() => {
     const nextType: QuizType = new URLSearchParams(window.location.search).get('type') === 'suitable' ? 'suitable' : 'personality';
@@ -67,6 +68,12 @@ export default function ResultPage() {
       ? (window.localStorage.getItem(LOCALE_STORAGE_KEY) as Locale)
       : getLocaleFromBrowser(navigator.languages?.[0]);
     setLocale(nextLocale);
+
+    const userAgent = navigator.userAgent;
+    setIsEmbeddedBrowser(
+      /MicroMessenger|Instagram|FBAN|FBAV|Line\//i.test(userAgent)
+      || (/; wv\)/i.test(userAgent) && /Android/i.test(userAgent))
+    );
   }, []);
 
   useEffect(() => {
@@ -113,8 +120,28 @@ export default function ResultPage() {
     window.location.href = '/choose';
   };
 
+  const copyResultLink = async () => {
+    try {
+      await navigator.clipboard.writeText(resultUrl);
+    } catch {
+      const input = document.createElement('textarea');
+      input.value = resultUrl;
+      input.style.position = 'fixed';
+      input.style.opacity = '0';
+      document.body.appendChild(input);
+      input.select();
+      document.execCommand('copy');
+      input.remove();
+    }
+    setMessage(t.notices.linkCopied);
+  };
+
   const shareImage = async () => {
     if (!cardRef.current || !primary) return;
+    if (isEmbeddedBrowser) {
+      setMessage(t.result.embeddedBrowserHint);
+      return;
+    }
     try {
       const dataUrl = await toPng(cardRef.current, { cacheBust: true, pixelRatio: 2 });
       const blob = await (await fetch(dataUrl)).blob();
@@ -168,7 +195,17 @@ export default function ResultPage() {
           <button className="ghost" onClick={resetQuiz}>{t.result.retry}</button>
         </div>
 
-        {isMobile && (
+        {isMobile && isEmbeddedBrowser === true && (
+          <div className="embedded-browser-panel" role="status">
+            <strong>{t.result.embeddedBrowserTitle}</strong>
+            <p>{t.result.embeddedBrowserHint}</p>
+            <button className="secondary" type="button" onClick={copyResultLink}>
+              {t.result.copyLink}
+            </button>
+          </div>
+        )}
+
+        {isMobile && isEmbeddedBrowser === false && (
           <div className="mobile-share-action">
             <button className="primary" type="button" onClick={shareImage}>
               <span aria-hidden="true">↗</span>

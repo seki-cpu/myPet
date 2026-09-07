@@ -62,6 +62,8 @@ export const jaMessages: PawMatchMessages = {
     instagram: 'Instagram',
     whatsapp: 'WhatsApp',
     line: 'LINE',
+    embeddedBrowserTitle: 'アプリ内ブラウザで開いています',
+    embeddedBrowserHint: 'WeChatやInstagramなどのアプリ内では、生成画像を直接共有できません。画像を保存してアルバムから送信するか、リンクをコピーしてChromeなどで開いてください。',
     topMatches: 'おすすめマッチ', scoreLabel: '相性度', personalityKeywords: '犬タイプのキーワード',
     personalityTraitLabels: { extraversion: '社交的', independence: '自立', warmth: '優しい', conscientiousness: '几帳面', curiosity: '好奇心', sensitivity: '敏感', stubbornness: '芯が強い', spontaneity: '自由気まま', confidence: '自信', loyalty: '一途' },
   },
@@ -70,6 +72,7 @@ export const jaMessages: PawMatchMessages = {
     privacy: 'PawMatchの回答と結果計算は、すべてお使いのブラウザ内で行われます。現在のバージョンではログインは不要で、氏名、メールアドレス、回答内容一式を収集しません。',
     imageFallback: '画像を作成できませんでした。スクリーンショットを撮るか、結果テキストをコピーしてください。',
     attachmentHint: '画像を保存しました。メールに手動で添付してください。',
+    linkCopied: 'リンクをコピーしました。チャットに貼り付けるか、外部ブラウザで開けます。',
   },
   questions: {
     q1: {

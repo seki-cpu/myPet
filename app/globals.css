@@ -130,6 +130,17 @@ button { font: inherit; }
   justify-content: center;
   gap: 8px;
 }
+.embedded-browser-panel {
+  margin-top: 12px;
+  padding: 14px;
+  border: 1px solid rgba(247, 167, 195, 0.55);
+  border-radius: 16px;
+  background: #fff4f8;
+  color: var(--text);
+}
+.embedded-browser-panel strong { color: #a04a6b; }
+.embedded-browser-panel p { margin: 8px 0 12px; color: var(--muted); line-height: 1.55; }
+.embedded-browser-panel .secondary { width: 100%; }
 
 @media (max-width: 700px) {
   .page-shell {
@@ -183,4 +194,3 @@ button { font: inherit; }
     grid-template-columns: 1fr;
   }
 }
-
