@@ -40,7 +40,7 @@ export const enMessages: PawMatchMessages = {
     secondaryPrefix: 'You also have a little {breed} in you',
     cuteFlawLabel: 'Your adorably tiny flaw',
     saveImage: 'Save image',
-    share: 'Share result',
+    share: 'Share image',
     email: 'Send by email',
     copy: 'Copy result text',
     copied: 'Copied',
@@ -62,6 +62,8 @@ export const enMessages: PawMatchMessages = {
     instagram: 'Instagram',
     whatsapp: 'WhatsApp',
     line: 'LINE',
+    embeddedBrowserTitle: 'Opened inside an app',
+    embeddedBrowserHint: 'In-app browsers such as WeChat and Instagram cannot reliably share generated images. Save the image and send it from your gallery, or copy the link and open it in Chrome or another browser.',
     topMatches: 'Top matches', scoreLabel: 'Match', personalityKeywords: 'Personality keywords',
     personalityTraitLabels: { extraversion: 'Social', independence: 'Independent', warmth: 'Warm', conscientiousness: 'Organized', curiosity: 'Curious', sensitivity: 'Perceptive', stubbornness: 'Opinionated', spontaneity: 'Spontaneous', confidence: 'Confident', loyalty: 'Loyal' },
   },
@@ -70,6 +72,7 @@ export const enMessages: PawMatchMessages = {
     privacy: 'Your PawMatch answers and result are processed entirely in your browser. This version requires no login and does not collect your name, email address, or complete answer set.',
     imageFallback: 'We couldn’t create the image. Take a screenshot or copy the result text instead.',
     attachmentHint: 'Image saved. Please attach it to your email manually.',
+    linkCopied: 'Link copied. Paste it into a chat or open it in an external browser.',
   },
   questions: {
     q1: {

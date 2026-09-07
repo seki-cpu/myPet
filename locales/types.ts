@@ -66,6 +66,8 @@ export interface PawMatchMessages {
     instagram: string;
     whatsapp: string;
     line: string;
+    embeddedBrowserTitle: string;
+    embeddedBrowserHint: string;
     topMatches: string;
     scoreLabel: string;
     personalityKeywords: string;
@@ -76,6 +78,7 @@ export interface PawMatchMessages {
     privacy: string;
     imageFallback: string;
     attachmentHint: string;
+    linkCopied: string;
   };
   questions: Record<QuestionId, {
     text: string;

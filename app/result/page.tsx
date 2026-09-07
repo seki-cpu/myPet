@@ -4,6 +4,7 @@ import { useEffect, useMemo, useRef, useState } from 'react';
 import Link from 'next/link';
 import { toPng } from 'html-to-image';
 import LocaleSwitcher from '@/components/LocaleSwitcher';
+import PawBackground from '@/components/PawBackground';
 import { computeResult } from '@/domain/scoring';
 import { computeSuitableResultV2 } from '@/domain/suitableScoring.v2';
 import { getBreedById } from '@/domain/scoring';
@@ -28,6 +29,7 @@ export default function ResultPage() {
   const [locale, setLocale] = useState<Locale>(DEFAULT_LOCALE);
   const [quizType, setQuizType] = useState<QuizType>('personality');
   const [isMobile, setIsMobile] = useState(false);
+  const [isEmbeddedBrowser, setIsEmbeddedBrowser] = useState<boolean | null>(null);
 
   useEffect(() => {
     const nextType: QuizType = new URLSearchParams(window.location.search).get('type') === 'suitable' ? 'suitable' : 'personality';
@@ -67,6 +69,12 @@ export default function ResultPage() {
       ? (window.localStorage.getItem(LOCALE_STORAGE_KEY) as Locale)
       : getLocaleFromBrowser(navigator.languages?.[0]);
     setLocale(nextLocale);
+
+    const userAgent = navigator.userAgent;
+    setIsEmbeddedBrowser(
+      /MicroMessenger|Instagram|FBAN|FBAV|Line\//i.test(userAgent)
+      || (/; wv\)/i.test(userAgent) && /Android/i.test(userAgent))
+    );
   }, []);
 
   useEffect(() => {
@@ -113,38 +121,64 @@ export default function ResultPage() {
     window.location.href = '/choose';
   };
 
-  const shareResult = async () => {
-    const breedName = messages[locale].breeds[primary?.id ?? '']?.name ?? primary?.name ?? '';
-    const text = quizType === 'suitable' ? t.result.suitableRevealTitle : t.result.revealTitle;
-    if (navigator.share) await navigator.share({ title: 'PawMatch', text: `${text} ${breedName}`, url: resultUrl });
-    else await navigator.clipboard?.writeText(`${text} ${breedName} ${resultUrl}`);
-    setMessage(t.result.copied);
+  const copyResultLink = async () => {
+    try {
+      await navigator.clipboard.writeText(resultUrl);
+    } catch {
+      const input = document.createElement('textarea');
+      input.value = resultUrl;
+      input.style.position = 'fixed';
+      input.style.opacity = '0';
+      document.body.appendChild(input);
+      input.select();
+      document.execCommand('copy');
+      input.remove();
+    }
+    setMessage(t.notices.linkCopied);
   };
 
-  const shareSocial = async (platform: 'wechat' | 'instagram' | 'whatsapp' | 'line' | 'copy') => {
-    const breedName = messages[locale].breeds[primary?.id ?? '']?.name ?? primary?.name ?? '';
-    const shareText = `${t.result.suitableRevealTitle} ${breedName} ${resultUrl}`;
+  const shareImage = async () => {
+    if (!cardRef.current || !primary) return;
+    if (isEmbeddedBrowser) {
+      setMessage(t.result.embeddedBrowserHint);
+      return;
+    }
     try {
-      await navigator.clipboard?.writeText(shareText);
-      if (platform === 'whatsapp') {
-        window.open(`https://wa.me/?text=${encodeURIComponent(shareText)}`, '_blank', 'noopener,noreferrer');
-      } else if (platform === 'line') {
-        window.open(`https://line.me/R/msg/text/?${encodeURIComponent(shareText)}`, '_blank', 'noopener,noreferrer');
-      } else if (platform === 'instagram') {
-        window.open('https://www.instagram.com/', '_blank', 'noopener,noreferrer');
+      const dataUrl = await toPng(cardRef.current, { cacheBust: true, pixelRatio: 2 });
+      const blob = await (await fetch(dataUrl)).blob();
+      const file = new File([blob], `pawmatch-${primary.id}.png`, { type: 'image/png' });
+      const breedName = messages[locale].breeds[primary.id]?.name ?? primary.name;
+      const revealTitle = quizType === 'suitable' ? t.result.suitableRevealTitle : t.result.revealTitle;
+      const shareText = `${revealTitle} ${breedName} ${resultUrl}`;
+
+      if (navigator.share && navigator.canShare?.({ files: [file] })) {
+        await navigator.share({ title: 'PawMatch', text: shareText, files: [file] });
+        return;
       }
-      setMessage(platform === 'copy' || platform === 'wechat' || platform === 'instagram' ? t.result.copied : t.result.copied);
-    } catch {
+
+      const link = document.createElement('a');
+      link.href = dataUrl;
+      link.download = file.name;
+      link.click();
+      setMessage(t.notices.attachmentHint);
+    } catch (error) {
+      if (error instanceof DOMException && error.name === 'AbortError') return;
       setMessage(t.notices.imageFallback);
     }
   };
 
   if (!result || !primary || !secondary) {
-    return <main className="page-shell"><div className="hero-card">{t.result.loading}</div></main>;
+    return (
+      <main className="page-shell result-page-shell">
+        <PawBackground />
+        <div className="hero-card result-loading-card">{t.result.loading}</div>
+      </main>
+    );
   }
 
   return (
-    <main className="page-shell">
+    <main className="page-shell result-page-shell">
+      <PawBackground />
       <section className="result-card">
         <LocaleSwitcher />
         <div className="result-preview" ref={cardRef}>
@@ -168,21 +202,22 @@ export default function ResultPage() {
           <button className="ghost" onClick={resetQuiz}>{t.result.retry}</button>
         </div>
 
-        {isMobile && (
-          <div className="action-group single-action">
-            <button className="primary" onClick={shareResult}>{t.result.share}</button>
+        {isMobile && isEmbeddedBrowser === true && (
+          <div className="embedded-browser-panel" role="status">
+            <strong>{t.result.embeddedBrowserTitle}</strong>
+            <p>{t.result.embeddedBrowserHint}</p>
+            <button className="secondary" type="button" onClick={copyResultLink}>
+              {t.result.copyLink}
+            </button>
           </div>
         )}
 
-        {quizType === 'suitable' && isMobile && (
-          <div className="action-group" aria-label={t.result.socialTitle}>
-            <div className="small-note">{t.result.socialTitle}</div>
-            <button className="primary" onClick={shareResult}>{t.result.share}</button>
-            <button className="secondary" onClick={() => shareSocial('copy')}>{t.result.copyLink}</button>
-            <button className="secondary" onClick={() => shareSocial('wechat')}>{t.result.wechat}</button>
-            <button className="secondary" onClick={() => shareSocial('instagram')}>{t.result.instagram}</button>
-            <button className="secondary" onClick={() => shareSocial('whatsapp')}>{t.result.whatsapp}</button>
-            <button className="secondary" onClick={() => shareSocial('line')}>{t.result.line}</button>
+        {isMobile && isEmbeddedBrowser === false && (
+          <div className="mobile-share-action">
+            <button className="primary" type="button" onClick={shareImage}>
+              <span aria-hidden="true">↗</span>
+              {t.result.share}
+            </button>
           </div>
         )}
 
