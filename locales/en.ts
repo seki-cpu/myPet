@@ -40,7 +40,7 @@ export const enMessages: PawMatchMessages = {
     secondaryPrefix: 'You also have a little {breed} in you',
     cuteFlawLabel: 'Your adorably tiny flaw',
     saveImage: 'Save image',
-    share: 'Share result',
+    share: 'Share image',
     email: 'Send by email',
     copy: 'Copy result text',
     copied: 'Copied',
