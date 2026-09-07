@@ -14,9 +14,16 @@ import type { QuizType } from '@/types/personality';
 const PERSONALITY_STORAGE_KEY = 'pawmatch:personality:v1';
 const SUITABLE_STORAGE_KEY = 'pawmatch:suitable:v1';
 
+type ResultState = {
+  primaryBreed: ReturnType<typeof getBreedById>;
+  secondaryBreed: ReturnType<typeof getBreedById>;
+  rankedBreeds?: Array<{ breedId: string; score: number }>;
+  keywords?: string[];
+};
+
 export default function ResultPage() {
   const cardRef = useRef<HTMLDivElement | null>(null);
-  const [result, setResult] = useState<any>(null);
+  const [result, setResult] = useState<ResultState | null>(null);
   const [message, setMessage] = useState('');
   const [locale, setLocale] = useState<Locale>(DEFAULT_LOCALE);
   const [quizType, setQuizType] = useState<QuizType>('personality');
@@ -46,7 +53,11 @@ export default function ResultPage() {
           window.location.href = `/quiz?type=${nextType}`;
           return;
         }
-        setResult(outcome);
+        setResult({
+          primaryBreed: outcome.primaryBreed,
+          secondaryBreed: outcome.secondaryBreed,
+          keywords: outcome.keywords,
+        });
       }
     } catch {
       window.location.href = '/';
@@ -78,7 +89,10 @@ export default function ResultPage() {
   const t = messages[locale];
   const primary = result?.primaryBreed;
   const secondary = result?.secondaryBreed;
-  const resultUrl = useMemo(() => `https://pawmatch.example/result?type=${quizType}&breed=${primary?.id ?? 'golden-retriever'}&second=${secondary?.id ?? 'poodle'}&v=1`, [primary, secondary, quizType]);
+  const resultUrl = useMemo(() => {
+    const path = `/result?type=${quizType}&breed=${primary?.id ?? 'golden-retriever'}&second=${secondary?.id ?? 'poodle'}&v=1`;
+    return typeof window === 'undefined' ? path : new URL(path, window.location.origin).toString();
+  }, [primary, secondary, quizType]);
 
   const downloadImage = async () => {
     if (!cardRef.current || !primary) return;
