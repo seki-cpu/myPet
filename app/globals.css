@@ -95,6 +95,10 @@ button { font: inherit; }
 .primary { background: linear-gradient(135deg, var(--pink-deep), #ffb7d4); color: white; font-weight: 700; }
 .secondary { background: var(--bg-soft); color: var(--green-deep); }
 .secondary:disabled, .primary:disabled { opacity: 0.45; cursor: not-allowed; }
+.result-page-shell { position: relative; overflow: hidden; isolation: isolate; }
+.result-card,
+.result-loading-card { position: relative; z-index: 2; }
+.result-loading-card { padding: 24px; text-align: center; }
 .result-card { width: min(100%, 640px); min-width: 0; max-width: 100%; padding: 20px; overflow: hidden; }
 .result-preview {
   background: linear-gradient(180deg, #fff4f8, #f5fff6);

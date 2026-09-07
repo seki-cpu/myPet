@@ -4,6 +4,7 @@ import { useEffect, useMemo, useRef, useState } from 'react';
 import Link from 'next/link';
 import { toPng } from 'html-to-image';
 import LocaleSwitcher from '@/components/LocaleSwitcher';
+import PawBackground from '@/components/PawBackground';
 import { computeResult } from '@/domain/scoring';
 import { computeSuitableResultV2 } from '@/domain/suitableScoring.v2';
 import { getBreedById } from '@/domain/scoring';
@@ -167,11 +168,17 @@ export default function ResultPage() {
   };
 
   if (!result || !primary || !secondary) {
-    return <main className="page-shell"><div className="hero-card">{t.result.loading}</div></main>;
+    return (
+      <main className="page-shell result-page-shell">
+        <PawBackground />
+        <div className="hero-card result-loading-card">{t.result.loading}</div>
+      </main>
+    );
   }
 
   return (
-    <main className="page-shell">
+    <main className="page-shell result-page-shell">
+      <PawBackground />
       <section className="result-card">
         <LocaleSwitcher />
         <div className="result-preview" ref={cardRef}>
