@@ -40,7 +40,7 @@ export const zhMessages: PawMatchMessages = {
     secondaryPrefix: '你也有一点像 {breed}',
     cuteFlawLabel: '可爱的小缺点',
     saveImage: '保存 PNG',
-    share: '系统分享',
+    share: '分享图片',
     email: '邮件分享',
     copy: '复制文案',
     copied: '已复制',
