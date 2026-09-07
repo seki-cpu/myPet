@@ -28,6 +28,7 @@ export default function ResultPage() {
   const [locale, setLocale] = useState<Locale>(DEFAULT_LOCALE);
   const [quizType, setQuizType] = useState<QuizType>('personality');
   const [isMobile, setIsMobile] = useState(false);
+  const [isShareMenuOpen, setIsShareMenuOpen] = useState(false);
 
   useEffect(() => {
     const nextType: QuizType = new URLSearchParams(window.location.search).get('type') === 'suitable' ? 'suitable' : 'personality';
@@ -113,17 +114,10 @@ export default function ResultPage() {
     window.location.href = '/choose';
   };
 
-  const shareResult = async () => {
-    const breedName = messages[locale].breeds[primary?.id ?? '']?.name ?? primary?.name ?? '';
-    const text = quizType === 'suitable' ? t.result.suitableRevealTitle : t.result.revealTitle;
-    if (navigator.share) await navigator.share({ title: 'PawMatch', text: `${text} ${breedName}`, url: resultUrl });
-    else await navigator.clipboard?.writeText(`${text} ${breedName} ${resultUrl}`);
-    setMessage(t.result.copied);
-  };
-
   const shareSocial = async (platform: 'wechat' | 'instagram' | 'whatsapp' | 'line' | 'copy') => {
     const breedName = messages[locale].breeds[primary?.id ?? '']?.name ?? primary?.name ?? '';
-    const shareText = `${t.result.suitableRevealTitle} ${breedName} ${resultUrl}`;
+    const revealTitle = quizType === 'suitable' ? t.result.suitableRevealTitle : t.result.revealTitle;
+    const shareText = `${revealTitle} ${breedName} ${resultUrl}`;
     try {
       await navigator.clipboard?.writeText(shareText);
       if (platform === 'whatsapp') {
@@ -133,7 +127,7 @@ export default function ResultPage() {
       } else if (platform === 'instagram') {
         window.open('https://www.instagram.com/', '_blank', 'noopener,noreferrer');
       }
-      setMessage(platform === 'copy' || platform === 'wechat' || platform === 'instagram' ? t.result.copied : t.result.copied);
+      setMessage(t.result.copied);
     } catch {
       setMessage(t.notices.imageFallback);
     }
@@ -169,21 +163,51 @@ export default function ResultPage() {
         </div>
 
         {isMobile && (
-          <div className="action-group single-action">
-            <button className="primary" onClick={shareResult}>{t.result.share}</button>
-          </div>
-        )}
+          <section className="share-panel" aria-label={t.result.socialTitle}>
+            <button
+              className="primary share-toggle"
+              type="button"
+              aria-expanded={isShareMenuOpen}
+              aria-controls="mobile-share-options"
+              onClick={() => setIsShareMenuOpen((isOpen) => !isOpen)}
+            >
+              <span aria-hidden="true">↗</span>
+              {t.result.share}
+              <span className={`share-chevron ${isShareMenuOpen ? 'open' : ''}`} aria-hidden="true">⌄</span>
+            </button>
 
-        {quizType === 'suitable' && isMobile && (
-          <div className="action-group" aria-label={t.result.socialTitle}>
-            <div className="small-note">{t.result.socialTitle}</div>
-            <button className="primary" onClick={shareResult}>{t.result.share}</button>
-            <button className="secondary" onClick={() => shareSocial('copy')}>{t.result.copyLink}</button>
-            <button className="secondary" onClick={() => shareSocial('wechat')}>{t.result.wechat}</button>
-            <button className="secondary" onClick={() => shareSocial('instagram')}>{t.result.instagram}</button>
-            <button className="secondary" onClick={() => shareSocial('whatsapp')}>{t.result.whatsapp}</button>
-            <button className="secondary" onClick={() => shareSocial('line')}>{t.result.line}</button>
-          </div>
+            {isShareMenuOpen && (
+              <div id="mobile-share-options" className="share-drawer">
+                <div className="share-drawer-title">{t.result.socialTitle}</div>
+                <div className="share-scroll" role="list">
+                  <button className="share-app" type="button" role="listitem" onClick={downloadImage}>
+                    <span className="share-app-icon share-app-image" aria-hidden="true">↓</span>
+                    <span>{t.result.saveImage}</span>
+                  </button>
+                  <button className="share-app" type="button" role="listitem" onClick={() => shareSocial('copy')}>
+                    <span className="share-app-icon share-app-copy" aria-hidden="true">↗</span>
+                    <span>{t.result.copyLink}</span>
+                  </button>
+                  <button className="share-app" type="button" role="listitem" onClick={() => shareSocial('wechat')}>
+                    <span className="share-app-icon share-app-wechat" aria-hidden="true">微</span>
+                    <span>{t.result.wechat}</span>
+                  </button>
+                  <button className="share-app" type="button" role="listitem" onClick={() => shareSocial('instagram')}>
+                    <span className="share-app-icon share-app-instagram" aria-hidden="true">◎</span>
+                    <span>{t.result.instagram}</span>
+                  </button>
+                  <button className="share-app" type="button" role="listitem" onClick={() => shareSocial('whatsapp')}>
+                    <span className="share-app-icon share-app-whatsapp" aria-hidden="true">☎</span>
+                    <span>{t.result.whatsapp}</span>
+                  </button>
+                  <button className="share-app" type="button" role="listitem" onClick={() => shareSocial('line')}>
+                    <span className="share-app-icon share-app-line" aria-hidden="true">L</span>
+                    <span>{t.result.line}</span>
+                  </button>
+                </div>
+              </div>
+            )}
+          </section>
         )}
 
         <div className="small-note">{message || t.notices.entertainment}</div>
